@@ -23,3 +23,19 @@ resource "docker_container" "database" {
     external = var.db_port[terraform.workspace]
   }
 }
+
+resource "docker_container" "api" {
+  name  = "api-${terraform.workspace}"
+  image = docker_image.node.image_id
+
+  command = [
+    "node",
+    "-e",
+    "require('http').createServer((req,res)=>res.end('API funcionando')).listen(3000)"
+  ]
+
+  ports {
+    internal = 3000
+    external = var.api_port[terraform.workspace]
+  }
+}
