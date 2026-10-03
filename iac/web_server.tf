@@ -9,3 +9,17 @@ resource "docker_image" "node" {
 resource "docker_image" "postgres" {
   name = "postgres:16-alpine"
 }
+
+resource "docker_container" "database" {
+  name  = "bd-${terraform.workspace}"
+  image = docker_image.postgres.image_id
+
+  env = [
+    "POSTGRES_PASSWORD=postgres"
+  ]
+
+  ports {
+    internal = 5432
+    external = var.db_port[terraform.workspace]
+  }
+}
