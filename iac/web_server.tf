@@ -39,3 +39,13 @@ resource "docker_container" "api" {
     external = var.api_port[terraform.workspace]
   }
 }
+
+resource "docker_container" "web" {
+  name  = "web-${terraform.workspace}"
+  image = docker_image.nginx.image_id
+
+  ports {
+    internal = 80
+    external = var.web_port[terraform.workspace]
+  }
+}
